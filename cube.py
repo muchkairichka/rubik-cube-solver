@@ -1,3 +1,4 @@
+from copy import deepcopy
 import random
 
 
@@ -13,7 +14,7 @@ class RubiksCube2x2:
                 "L": ["O", "O", "O", "O"],  # Оранжевая
             }
         else:
-            self.cube = cube
+            self.cube = deepcopy(cube)
 
     def rotate_face(self, face):
         self.cube[face] = [
@@ -46,68 +47,68 @@ class RubiksCube2x2:
         """Поворот верхней грани против часовой стрелки"""
         self.rotate_face_prime("U")
         (
-            self.cube["F"][0],
-            self.cube["F"][1],
             self.cube["R"][0],
             self.cube["R"][1],
             self.cube["B"][0],
             self.cube["B"][1],
             self.cube["L"][0],
             self.cube["L"][1],
+            self.cube["F"][0],
+            self.cube["F"][1],
         ) = (
+            self.cube["F"][0],
+            self.cube["F"][1],
             self.cube["R"][0],
             self.cube["R"][1],
             self.cube["B"][0],
             self.cube["B"][1],
             self.cube["L"][0],
             self.cube["L"][1],
-            self.cube["F"][0],
-            self.cube["F"][1],
         )
 
     def rotate_U(self):
         self.rotate_face("U")
         (
+            self.cube["L"][0],
+            self.cube["L"][1],
             self.cube["F"][0],
             self.cube["F"][1],
             self.cube["R"][0],
             self.cube["R"][1],
             self.cube["B"][0],
             self.cube["B"][1],
-            self.cube["L"][0],
-            self.cube["L"][1],
         ) = (
-            self.cube["L"][0],
-            self.cube["L"][1],
             self.cube["F"][0],
             self.cube["F"][1],
             self.cube["R"][0],
             self.cube["R"][1],
             self.cube["B"][0],
             self.cube["B"][1],
+            self.cube["L"][0],
+            self.cube["L"][1],
         )
 
     def rotate_D_prime(self):
         """Поворот нижней грани против часовой стрелки"""
         self.rotate_face_prime("D")
         (
+            self.cube["L"][2],
+            self.cube["L"][3],
             self.cube["F"][2],
             self.cube["F"][3],
             self.cube["R"][2],
             self.cube["R"][3],
             self.cube["B"][2],
             self.cube["B"][3],
-            self.cube["L"][2],
-            self.cube["L"][3],
         ) = (
-            self.cube["L"][2],
-            self.cube["L"][3],
             self.cube["F"][2],
             self.cube["F"][3],
             self.cube["R"][2],
             self.cube["R"][3],
             self.cube["B"][2],
             self.cube["B"][3],
+            self.cube["L"][2],
+            self.cube["L"][3],
         )
 
     def rotate_D(self):
@@ -122,59 +123,59 @@ class RubiksCube2x2:
             self.cube["L"][2],
             self.cube["L"][3],
         ) = (
-            self.cube["R"][2],
-            self.cube["R"][3],
-            self.cube["B"][2],
-            self.cube["B"][3],
             self.cube["L"][2],
             self.cube["L"][3],
             self.cube["F"][2],
             self.cube["F"][3],
+            self.cube["R"][2],
+            self.cube["R"][3],
+            self.cube["B"][2],
+            self.cube["B"][3],
         )
 
     def rotate_F_prime(self):
         """Поворот передней грани против часовой стрелки"""
         self.rotate_face_prime("F")
         (
+            self.cube["L"][3],
+            self.cube["L"][1],
             self.cube["U"][2],
             self.cube["U"][3],
             self.cube["R"][0],
             self.cube["R"][2],
             self.cube["D"][0],
             self.cube["D"][1],
-            self.cube["L"][1],
-            self.cube["L"][3],
         ) = (
-            self.cube["L"][3],
-            self.cube["L"][1],
             self.cube["U"][2],
             self.cube["U"][3],
             self.cube["R"][0],
             self.cube["R"][2],
-            self.cube["D"][0],
             self.cube["D"][1],
+            self.cube["D"][0],
+            self.cube["L"][1],
+            self.cube["L"][3],
         )
 
     def rotate_F(self):
         self.rotate_face("F")
         (
-            self.cube["U"][2],
-            self.cube["U"][3],
             self.cube["R"][0],
             self.cube["R"][2],
             self.cube["D"][0],
             self.cube["D"][1],
             self.cube["L"][1],
             self.cube["L"][3],
+            self.cube["U"][2],
+            self.cube["U"][3],
         ) = (
-            self.cube["R"][0],
-            self.cube["R"][2],
-            self.cube["D"][0],
-            self.cube["D"][1],
-            self.cube["L"][1],
-            self.cube["L"][3],
             self.cube["U"][2],
             self.cube["U"][3],
+            self.cube["R"][2],
+            self.cube["R"][0],
+            self.cube["D"][0],
+            self.cube["D"][1],
+            self.cube["L"][3],
+            self.cube["L"][1],
         )
 
     def rotate_B_prime(self):
@@ -190,12 +191,12 @@ class RubiksCube2x2:
             self.cube["L"][0],
             self.cube["L"][2],
         ) = (
-            self.cube["L"][0],
             self.cube["L"][2],
+            self.cube["L"][0],
             self.cube["U"][0],
             self.cube["U"][1],
-            self.cube["R"][1],
             self.cube["R"][3],
+            self.cube["R"][1],
             self.cube["D"][2],
             self.cube["D"][3],
         )
@@ -214,12 +215,12 @@ class RubiksCube2x2:
         ) = (
             self.cube["R"][1],
             self.cube["R"][3],
-            self.cube["D"][2],
             self.cube["D"][3],
+            self.cube["D"][2],
             self.cube["L"][0],
             self.cube["L"][2],
-            self.cube["U"][0],
             self.cube["U"][1],
+            self.cube["U"][0],
         )
 
     def rotate_R(self):
@@ -238,10 +239,10 @@ class RubiksCube2x2:
             self.cube["D"][3],
             self.cube["F"][1],
             self.cube["F"][3],
-            self.cube["U"][1],
             self.cube["U"][3],
-            self.cube["B"][1],
-            self.cube["B"][3],
+            self.cube["U"][1],
+            self.cube["B"][2],
+            self.cube["B"][0],
         )
 
     def rotate_R_prime(self):
@@ -259,10 +260,10 @@ class RubiksCube2x2:
         ) = (
             self.cube["U"][1],
             self.cube["U"][3],
-            self.cube["B"][1],
-            self.cube["B"][3],
-            self.cube["D"][1],
+            self.cube["B"][2],
+            self.cube["B"][0],
             self.cube["D"][3],
+            self.cube["D"][1],
             self.cube["F"][1],
             self.cube["F"][3],
         )
@@ -284,10 +285,10 @@ class RubiksCube2x2:
             self.cube["D"][2],
             self.cube["F"][0],
             self.cube["F"][2],
-            self.cube["U"][0],
             self.cube["U"][2],
-            self.cube["B"][0],
-            self.cube["B"][2],
+            self.cube["U"][0],
+            self.cube["B"][3],
+            self.cube["B"][1],
         )
 
     def rotate_L(self):
@@ -304,10 +305,10 @@ class RubiksCube2x2:
         ) = (
             self.cube["U"][0],
             self.cube["U"][2],
-            self.cube["B"][0],
-            self.cube["B"][2],
-            self.cube["D"][0],
+            self.cube["B"][3],
+            self.cube["B"][1],
             self.cube["D"][2],
+            self.cube["D"][0],
             self.cube["F"][0],
             self.cube["F"][2],
         )
