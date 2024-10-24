@@ -1,191 +1,426 @@
-from main import RubiksCube2x2
+from cube import RubiksCube2x2
 
 def test_rotation_r():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "Y", "R", "W"], # UP
+        "D": ["W", "B", "O", "O"], # DOWN
+        "F": ["Y", "B", "G", "R"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["O", "O", "W", "G"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_R()
 
-    cube_result = {
-        'U': ['W', 'G', 'W', 'G'],  # Белая
-        'D': ['Y', 'B', 'Y', 'B'],  # Желтая
-        'F': ['G', 'Y', 'G', 'Y'],  # Зеленая
-        'B': ['W', 'B', 'W', 'B'],  # Синяя
-        'R': ['R', 'R', 'R', 'R'],  # Красная
-        'L': ['O', 'O', 'O', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["Y", "B", "R", "R"], # UP
+        "D": ["W", "Y", "O", "B"], # DOWN
+        "F": ["Y", "B", "G", "O"], # FRONT
+        "B": ["W", "B", "Y", "W"], # BACK
+        "R": ["W", "O", "G", "O"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
     }
 
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
 
 def test_rotation_r_prime():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "Y", "R", "W"], # UP
+        "D": ["W", "B", "O", "O"], # DOWN
+        "F": ["Y", "B", "G", "R"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["O", "O", "W", "G"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_R_prime()
 
-    cube_result = {
-        'U': ['W', 'B', 'W', 'B'],  # Белая
-        'D': ['Y', 'G', 'Y', 'G'],  # Желтая
-        'F': ['G', 'W', 'G', 'W'],  # Зеленая
-        'B': ['Y', 'B', 'Y', 'B'],  # Синяя
-        'R': ['R', 'R', 'R', 'R'],  # Красная
-        'L': ['O', 'O', 'O', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["Y", "Y", "R", "B"], # UP
+        "D": ["W", "B", "O", "R"], # DOWN
+        "F": ["Y", "Y", "G", "W"], # FRONT
+        "B": ["O", "B", "B", "W"], # BACK
+        "R": ["O", "G", "O", "W"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
     }
 
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
+
+def test_rotation_r_back_and_forth():
+    original_cube = {
+        "U": ["Y", "Y", "R", "W"], # UP
+        "D": ["W", "B", "O", "O"], # DOWN
+        "F": ["Y", "B", "G", "R"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["O", "O", "W", "G"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    cube.rotate_R()
+    cube.rotate_R_prime()
+
+    assert cube.cube == original_cube
 
 def test_rotation_l():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "W", "R", "W"], # UP
+        "D": ["Y", "O", "O", "W"], # DOWN
+        "F": ["Y", "R", "B", "W"], # FRONT
+        "B": ["O", "G", "G", "Y"], # BACK
+        "R": ["B", "B", "G", "R"], # RIGHT
+        "L": ["O", "G", "B", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_L()
 
-    cube_result = {
-        'U': ['B', 'W', 'B', 'W'],  # Белая
-        'D': ['G', 'Y', 'G', 'Y'],  # Желтая
-        'F': ['W', 'G', 'W', 'G'],  # Зеленая
-        'B': ['B', 'Y', 'B', 'Y'],  # Синяя
-        'R': ['R', 'R', 'R', 'R'],  # Красная
-        'L': ['O', 'O', 'O', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["Y", "W", "G", "W"], # UP
+        "D": ["Y", "O", "B", "W"], # DOWN
+        "F": ["Y", "R", "R", "W"], # FRONT
+        "B": ["O", "O", "G", "Y"], # BACK
+        "R": ["B", "B", "G", "R"], # RIGHT
+        "L": ["B", "O", "R", "G"]  # LEFT
     }
 
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
 
 def test_rotation_l_prime():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "W", "R", "W"], # UP
+        "D": ["Y", "O", "O", "W"], # DOWN
+        "F": ["Y", "R", "B", "W"], # FRONT
+        "B": ["O", "G", "G", "Y"], # BACK
+        "R": ["B", "B", "G", "R"], # RIGHT
+        "L": ["O", "G", "B", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_L_prime()
 
-    cube_result = {
-        'U': ['G', 'W', 'G', 'W'],  # Белая
-        'D': ['B', 'Y', 'B', 'Y'],  # Желтая
-        'F': ['Y', 'G', 'Y', 'G'],  # Зеленая
-        'B': ['B', 'W', 'B', 'W'],  # Синяя
-        'R': ['R', 'R', 'R', 'R'],  # Красная
-        'L': ['O', 'O', 'O', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["Y", "W", "B", "W"], # UP
+        "D": ["Y", "O", "G", "W"], # DOWN
+        "F": ["Y", "R", "O", "W"], # FRONT
+        "B": ["O", "R", "G", "Y"], # BACK
+        "R": ["B", "B", "G", "R"], # RIGHT
+        "L": ["G", "R", "O", "B"]  # LEFT
     }
 
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
+
+def test_rotation_l_back_and_forth():
+    original_cube = {
+        "U": ["Y", "W", "R", "W"], # UP
+        "D": ["Y", "O", "O", "W"], # DOWN
+        "F": ["Y", "R", "B", "W"], # FRONT
+        "B": ["O", "G", "G", "Y"], # BACK
+        "R": ["B", "B", "G", "R"], # RIGHT
+        "L": ["O", "G", "B", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    cube.rotate_L()
+    cube.rotate_L_prime()
+
+    assert cube.cube == original_cube
 
 def test_rotation_u_prime():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["B", "G", "G", "O"], # FRONT
+        "B": ["Y", "G", "G", "W"], # BACK
+        "R": ["Y", "R", "Y", "W"], # RIGHT
+        "L": ["O", "R", "O", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_U_prime()
 
-    cube_result = {
-        'U': ['W', 'W', 'W', 'W'],  # Белая
-        'D': ['Y', 'Y', 'Y', 'Y'],  # Желтая
-        'F': ['R', 'R', 'G', 'G'],  # Зеленая
-        'B': ['O', 'O', 'B', 'B'],  # Синяя
-        'R': ['B', 'B', 'R', 'R'],  # Красная
-        'L': ['G', 'G', 'O', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["B", "R", "Y", "W"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["O", "R", "G", "O"], # FRONT
+        "B": ["Y", "R", "G", "W"], # BACK
+        "R": ["B", "G", "Y", "W"], # RIGHT
+        "L": ["Y", "G", "O", "R"]  # LEFT
     }
 
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
 
 def test_rotation_u():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["B", "G", "G", "O"], # FRONT
+        "B": ["Y", "G", "G", "W"], # BACK
+        "R": ["Y", "R", "Y", "W"], # RIGHT
+        "L": ["O", "R", "O", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_U()
 
-    cube_result = {
-        'U': ['W', 'W', 'W', 'W'],  # Белая
-        'D': ['Y', 'Y', 'Y', 'Y'],  # Желтая
-        'F': ['O', 'O', 'G', 'G'],  # Зеленая
-        'B': ['R', 'R', 'B', 'B'],  # Синяя
-        'R': ['G', 'G', 'R', 'R'],  # Красная
-        'L': ['B', 'B', 'O', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["W", "Y", "R", "B"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["Y", "R", "G", "O"], # FRONT
+        "B": ["O", "R", "G", "W"], # BACK
+        "R": ["Y", "G", "Y", "W"], # RIGHT
+        "L": ["B", "G", "O", "R"]  # LEFT
     }
 
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
+
+def test_rotation_u_back_and_forth():
+    original_cube = {
+        "U": ["Y", "W", "R", "W"], # UP
+        "D": ["Y", "O", "O", "W"], # DOWN
+        "F": ["Y", "R", "B", "W"], # FRONT
+        "B": ["O", "G", "G", "Y"], # BACK
+        "R": ["B", "B", "G", "R"], # RIGHT
+        "L": ["O", "G", "B", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    cube.rotate_U()
+    cube.rotate_U_prime()
+
+    assert cube.cube == original_cube
 
 def test_rotation_d_prime():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["B", "G", "G", "O"], # FRONT
+        "B": ["Y", "G", "G", "W"], # BACK
+        "R": ["Y", "R", "Y", "W"], # RIGHT
+        "L": ["O", "R", "O", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_D_prime()
 
-    cube_result = {
-        'U': ['W', 'W', 'W', 'W'],  # Белая
-        'D': ['Y', 'Y', 'Y', 'Y'],  # Желтая
-        'F': ['G', 'G', 'O', 'O'],  # Зеленая
-        'B': ['B', 'B', 'R', 'R'],  # Синяя
-        'R': ['R', 'R', 'G', 'G'],  # Красная
-        'L': ['O', 'O', 'B', 'B']   # Оранжевая
+    expected_result = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["B", "O", "W", "B"], # DOWN
+        "F": ["B", "G", "Y", "W"], # FRONT
+        "B": ["Y", "G", "O", "R"], # BACK
+        "R": ["Y", "R", "G", "W"], # RIGHT
+        "L": ["O", "R", "G", "O"]  # LEFT
     }
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
 
 def test_rotation_d():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["B", "G", "G", "O"], # FRONT
+        "B": ["Y", "G", "G", "W"], # BACK
+        "R": ["Y", "R", "Y", "W"], # RIGHT
+        "L": ["O", "R", "O", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_D()
 
-    cube_result = {
-        'U': ['W', 'W', 'W', 'W'],  # Белая
-        'D': ['Y', 'Y', 'Y', 'Y'],  # Желтая
-        'F': ['G', 'G', 'R', 'R'],  # Зеленая
-        'B': ['B', 'B', 'O', 'O'],  # Синяя
-        'R': ['R', 'R', 'B', 'B'],  # Красная
-        'L': ['O', 'O', 'G', 'G']   # Оранжевая
+    expected_result = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["B", "W", "O", "B"], # DOWN
+        "F": ["B", "G", "O", "R"], # FRONT
+        "B": ["Y", "G", "Y", "W"], # BACK
+        "R": ["Y", "R", "G", "O"], # RIGHT
+        "L": ["O", "R", "G", "W"]  # LEFT
     }
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
+
+def test_rotation_d_back_and_forth():
+    original_cube = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["B", "G", "G", "O"], # FRONT
+        "B": ["Y", "G", "G", "W"], # BACK
+        "R": ["Y", "R", "Y", "W"], # RIGHT
+        "L": ["O", "R", "O", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    cube.rotate_D()
+    cube.rotate_D_prime()
+
+    assert cube.cube == original_cube
+
 
 def test_rotation_b():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["Y", "B", "W", "R"], # UP
+        "D": ["W", "B", "B", "O"], # DOWN
+        "F": ["B", "G", "G", "O"], # FRONT
+        "B": ["Y", "G", "G", "W"], # BACK
+        "R": ["Y", "R", "Y", "W"], # RIGHT
+        "L": ["O", "R", "O", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_B()
 
-    cube_result = {
-        'U': ['R', 'R', 'W', 'W'],  # Белая
-        'D': ['Y', 'Y', 'O', 'O'],  # Желтая
-        'F': ['G', 'G', 'G', 'G'],  # Зеленая
-        'B': ['B', 'B', 'B', 'B'],  # Синяя
-        'R': ['R', 'Y', 'R', 'Y'],  # Красная
-        'L': ['W', 'O', 'W', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["R", "W", "W", "R"], # UP
+        "D": ["W", "B", "O", "O"], # DOWN
+        "F": ["B", "G", "G", "O"], # FRONT
+        "B": ["G", "Y", "W", "G"], # BACK
+        "R": ["Y", "O", "Y", "B"], # RIGHT
+        "L": ["B", "R", "Y", "R"]  # LEFT
     }
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
 
 def test_rotation_b_prime():
-    cube = RubiksCube2x2()
+    original_cube = {
+        "U": ["B", "R", "R", "Y"], # UP
+        "D": ["G", "G", "O", "R"], # DOWN
+        "F": ["B", "G", "W", "W"], # FRONT
+        "B": ["Y", "O", "B", "Y"], # BACK
+        "R": ["O", "G", "R", "W"], # RIGHT
+        "L": ["W", "Y", "B", "O"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
     cube.rotate_B_prime()
 
-    cube_result = {
-        'U': ['O', 'O', 'W', 'W'],  # Белая
-        'D': ['Y', 'Y', 'R', 'R'],  # Желтая
-        'F': ['G', 'G', 'G', 'G'],  # Зеленая
-        'B': ['B', 'B', 'B', 'B'],  # Синяя
-        'R': ['R', 'W', 'R', 'W'],  # Красная
-        'L': ['Y', 'O', 'Y', 'O']   # Оранжевая
+    expected_result = {
+        "U": ["B", "W", "R", "Y"], # UP
+        "D": ["G", "G", "W", "G"], # DOWN
+        "F": ["B", "G", "W", "W"], # FRONT
+        "B": ["O", "Y", "Y", "B"], # BACK
+        "R": ["O", "B", "R", "R"], # RIGHT
+        "L": ["O", "Y", "R", "O"]  # LEFT
     }
-    assert cube.cube == cube_result
+    assert cube.cube == expected_result
+
+def test_rotation_b_back_and_forth():
+    original_cube = {
+        "U": ["B", "R", "R", "Y"], # UP
+        "D": ["G", "G", "O", "R"], # DOWN
+        "F": ["B", "G", "W", "W"], # FRONT
+        "B": ["Y", "O", "B", "Y"], # BACK
+        "R": ["O", "G", "R", "W"], # RIGHT
+        "L": ["W", "Y", "B", "O"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    cube.rotate_B()
+    cube.rotate_B_prime()
+
+    assert cube.cube == original_cube
+
+def test_rotation_F():
+    original_cube = {
+        "U": ["Y", "Y", "R", "W"], # UP
+        "D": ["W", "B", "O", "O"], # DOWN
+        "F": ["Y", "B", "G", "R"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["O", "O", "W", "G"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    rotated_cube = {
+        "U": ["Y", "Y", "R", "G"], # UP
+        "D": ["W", "O", "O", "O"], # DOWN
+        "F": ["G", "Y", "R", "B"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["R", "O", "W", "G"], # RIGHT
+        "L": ["R", "W", "G", "B"]  # LEFT
+    }
+
+    cube.rotate_F()
+
+    assert cube.cube == rotated_cube
+
+def test_rotation_F_prime():
+    original_cube = {
+        "U": ["Y", "Y", "R", "W"], # UP
+        "D": ["W", "B", "O", "O"], # DOWN
+        "F": ["Y", "B", "G", "R"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["O", "O", "W", "G"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    rotated_cube = {
+        "U": ["Y", "Y", "O", "W"], # UP
+        "D": ["G", "R", "O", "O"], # DOWN
+        "F": ["B", "R", "Y", "G"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["B", "O", "W", "G"], # RIGHT
+        "L": ["R", "W", "G", "R"]  # LEFT
+    }
+
+    cube.rotate_F_prime()
+
+    assert cube.cube == rotated_cube
+
+def test_rotation_F_back_and_forth():
+    original_cube = {
+        "U": ["Y", "Y", "R", "W"], # UP
+        "D": ["W", "B", "O", "O"], # DOWN
+        "F": ["Y", "B", "G", "R"], # FRONT
+        "B": ["B", "B", "Y", "W"], # BACK
+        "R": ["O", "O", "W", "G"], # RIGHT
+        "L": ["R", "G", "G", "R"]  # LEFT
+    }
+    cube = RubiksCube2x2(original_cube)
+
+    cube.rotate_F()
+    cube.rotate_F_prime()
+
+    assert cube.cube == original_cube
 
 def test_rotation_face():
     c = {
-        "U": ["W", "O", "R", "W"],
-        "D": ["Y", "B", "G", "R"],
-        "F": ["Y", "G", "B", "O"],
-        "B": ["W", "B", "B", "Y"],
-        "R": ["R", "G", "Y", "W"],
-        "L": ["O", "G", "O", "R"]
+        "U": ["W", "O", "R", "W"], # UP
+        "D": ["Y", "B", "G", "R"], # DOWN
+        "F": ["Y", "G", "B", "O"], # FRONT
+        "B": ["W", "B", "B", "Y"], # BACK
+        "R": ["R", "G", "Y", "W"], # RIGHT
+        "L": ["O", "G", "O", "R"]  # LEFT
     }
     cube = RubiksCube2x2(c)
     cube.rotate_face("F")
 
     cube_result = {
-        "U": ["W", "O", "R", "W"],
-        "D": ["Y", "B", "G", "R"],
-        "F": ["B", "Y", "O", "G"],
-        "B": ["W", "B", "B", "Y"],
-        "R": ["R", "G", "Y", "W"],
-        "L": ["O", "G", "O", "R"]
+        "U": ["W", "O", "R", "W"], # UP
+        "D": ["Y", "B", "G", "R"], # DOWN
+        "F": ["B", "Y", "O", "G"], # FRONT
+        "B": ["W", "B", "B", "Y"], # BACK
+        "R": ["R", "G", "Y", "W"], # RIGHT
+        "L": ["O", "G", "O", "R"]  # LEFT
     }
     assert cube.cube == cube_result
 
 def test_rotation_face_prime():
     c = {
-        "U": ["W", "O", "R", "W"],
-        "D": ["Y", "B", "G", "R"],
-        "F": ["Y", "G", "B", "O"],
-        "B": ["W", "B", "B", "Y"],
-        "R": ["R", "G", "Y", "W"],
-        "L": ["O", "G", "O", "R"]
+        "U": ["W", "O", "R", "W"], # UP
+        "D": ["Y", "B", "G", "R"], # DOWN
+        "F": ["Y", "G", "B", "O"], # FRONT
+        "B": ["W", "B", "B", "Y"], # BACK
+        "R": ["R", "G", "Y", "W"], # RIGHT
+        "L": ["O", "G", "O", "R"]  # LEFT
     }
     cube = RubiksCube2x2(c)
     cube.rotate_face_prime("F")
 
     cube_result = {
-        "U": ["W", "O", "R", "W"],
-        "D": ["Y", "B", "G", "R"],
-        "F": ["G", "O", "Y", "B"],
-        "B": ["W", "B", "B", "Y"],
-        "R": ["R", "G", "Y", "W"],
-        "L": ["O", "G", "O", "R"]
+        "U": ["W", "O", "R", "W"], # UP
+        "D": ["Y", "B", "G", "R"], # DOWN
+        "F": ["G", "O", "Y", "B"], # FRONT
+        "B": ["W", "B", "B", "Y"], # BACK
+        "R": ["R", "G", "Y", "W"], # RIGHT
+        "L": ["O", "G", "O", "R"]  # LEFT
     }
     assert cube.cube == cube_result
