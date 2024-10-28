@@ -313,6 +313,108 @@ class RubiksCube2x2:
             self.cube["F"][2],
         )
 
+    def rotate_X(self):
+        """Поворот кубика вокруг оси X по часовой стрелке"""
+        self.rotate_face("R")
+        self.rotate_face_prime("L")
+        # Поворот смежных граней
+        (
+            self.cube["U"],
+            self.cube["D"],
+            self.cube["B"],
+            self.cube["F"],
+        ) = (
+            self.cube["F"],
+            self.cube["B"][::-1],
+            self.cube["U"][::-1],
+            self.cube["D"],
+    )
+
+    def rotate_X_prime(self):
+        """Поворот кубика вокруг оси X против часовой стрелке"""
+        self.rotate_face("L")
+        self.rotate_face_prime("R")
+        # Поворот смежных граней
+        (
+            self.cube["U"],
+            self.cube["D"],
+            self.cube["B"],
+            self.cube["F"],
+        ) = (
+            self.cube["B"][::-1],
+            self.cube["F"],
+            self.cube["D"][::-1],
+            self.cube["U"],
+    )
+
+    def rotate_Y(self):
+        """Поворот кубика вокруг оси Y по часовой стрелке"""
+        self.rotate_face("U")
+        self.rotate_face_prime("D")
+        # Поворот смежных граней
+        (
+            self.cube["F"],
+            self.cube["R"],
+            self.cube["B"],
+            self.cube["L"],
+        ) = (
+            self.cube["R"],
+            self.cube["B"],
+            self.cube["L"],
+            self.cube["F"],
+    )
+        
+    def rotate_Y_prime(self):
+        """Поворот кубика вокруг оси Y против часовой стрелке"""
+        self.rotate_face("D")
+        self.rotate_face_prime("U")
+        # Поворот смежных граней
+        (
+            self.cube["F"],
+            self.cube["R"],
+            self.cube["B"],
+            self.cube["L"],
+        ) = (
+            self.cube["L"],
+            self.cube["F"],
+            self.cube["R"],
+            self.cube["B"],
+    )
+
+    def rotate_Z(self):
+        """Поворот кубика вокруг оси Z по часовой стрелке"""
+        self.rotate_face("F")
+        self.rotate_face_prime("B")
+        # Поворот смежных граней
+        (
+            self.cube["U"],
+            self.cube["R"],
+            self.cube["D"],
+            self.cube["L"],
+        ) = (
+            self.cube["L"],
+            self.cube["U"],
+            self.cube["R"],
+            self.cube["D"],
+    )
+
+    def rotate_Z_prime(self):
+        """Поворот кубика вокруг оси Z против часовой стрелке"""
+        self.rotate_face("B")
+        self.rotate_face_prime("F")
+        # Поворот смежных граней
+        (
+            self.cube["U"],
+            self.cube["R"],
+            self.cube["D"],
+            self.cube["L"],
+        ) = (
+            self.cube["R"],
+            self.cube["D"],
+            self.cube["L"],
+            self.cube["U"],
+    )
+
     def display_cube(self):
         for face in ["U", "F", "R", "D", "L", "B"]:
             print(f"{face}: {self.cube[face]}")
