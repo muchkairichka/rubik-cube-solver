@@ -1,390 +1,312 @@
-from copy import deepcopy
 import random
+
+from collections import namedtuple
+from copy import deepcopy
+from enum import Flag, StrEnum
+from typing import Annotated, List, Tuple
+
+
+Neighbors = List[Tuple[str, List[int]]]
+
+
+class Side(StrEnum):
+    Up = "U"
+    Down = "D"
+    Front = "F"
+    Back = "B"
+    Right = "R"
+    Left = "L"
+
+
+SwapHelper = namedtuple(
+    "SwapHelper", ["new_side", "new_indicies", "old_side", "old_indicies"]
+)
 
 
 class RubiksCube2x2:
     def __init__(self, cube=None):
         if cube is None:
             self.cube = {
-                "U": ["W", "W", "W", "W"],  # Белая
-                "D": ["Y", "Y", "Y", "Y"],  # Желтая
-                "F": ["G", "G", "G", "G"],  # Зеленая
-                "B": ["B", "B", "B", "B"],  # Синяя
-                "R": ["R", "R", "R", "R"],  # Красная
-                "L": ["O", "O", "O", "O"],  # Оранжевая
+                Side.Up: ["W", "W", "W", "W"],  # Белая
+                Side.Down: ["Y", "Y", "Y", "Y"],  # Желтая
+                Side.Front: ["G", "G", "G", "G"],  # Зеленая
+                Side.Back: ["B", "B", "B", "B"],  # Синяя
+                Side.Right: ["R", "R", "R", "R"],  # Красная
+                Side.Left: ["O", "O", "O", "O"],  # Оранжевая
             }
         else:
             self.cube = deepcopy(cube)
 
-    def rotate_face(self, face):
-        self.cube[face] = [
-            self.cube[face][2],
-            self.cube[face][0],
-            self.cube[face][3],
-            self.cube[face][1],
-        ]
+    def _rotate_face(self, face: Side, clockwise: bool = True):
+        if clockwise:
+            self.cube[face] = [
+                self.cube[face][2],
+                self.cube[face][0],
+                self.cube[face][3],
+                self.cube[face][1],
+            ]
+        else:
+            self.cube[face] = [
+                self.cube[face][1],
+                self.cube[face][3],
+                self.cube[face][0],
+                self.cube[face][2],
+            ]
 
-    def rotate_face_prime(self, face):
-        self.cube[face] = [
-            self.cube[face][1],
-            self.cube[face][3],
-            self.cube[face][0],
-            self.cube[face][2],
-        ]
-
-    def rotate(self, face, neighbors):
-        self.rotate_face(face)
-        temp = [self.cube[neighbors[0][0]][i] for i in neighbors[0][1]]
-        for i in range(3):
-            for j, pos in enumerate(neighbors[i][1]):
-                self.cube[neighbors[i][0]][pos] = self.cube[neighbors[i + 1][0]][
-                    neighbors[i + 1][1][j]
-                ]
-        for j, pos in enumerate(neighbors[3][1]):
-            self.cube[neighbors[3][0]][pos] = temp[j]
+    def _swap_elements(self, mapping: Annotated[Tuple[SwapHelper], 4]):
+        pair1, pair2, pair3, pair4 = mapping
+        (
+            self.cube[pair1.new_side][pair1.new_indicies[0]],
+            self.cube[pair1.new_side][pair1.new_indicies[1]],
+            self.cube[pair2.new_side][pair2.new_indicies[0]],
+            self.cube[pair2.new_side][pair2.new_indicies[1]],
+            self.cube[pair3.new_side][pair3.new_indicies[0]],
+            self.cube[pair3.new_side][pair3.new_indicies[1]],
+            self.cube[pair4.new_side][pair4.new_indicies[0]],
+            self.cube[pair4.new_side][pair4.new_indicies[1]],
+        ) = (
+            self.cube[pair1.old_side][pair1.old_indicies[0]],
+            self.cube[pair1.old_side][pair1.old_indicies[1]],
+            self.cube[pair2.old_side][pair2.old_indicies[0]],
+            self.cube[pair2.old_side][pair2.old_indicies[1]],
+            self.cube[pair3.old_side][pair3.old_indicies[0]],
+            self.cube[pair3.old_side][pair3.old_indicies[1]],
+            self.cube[pair4.old_side][pair4.old_indicies[0]],
+            self.cube[pair4.old_side][pair4.old_indicies[1]],
+        )
 
     def rotate_U_prime(self):
         """Поворот верхней грани против часовой стрелки"""
-        self.rotate_face_prime("U")
+        self._rotate_face(Side.Up, clockwise=False)
         (
-            self.cube["R"][0],
-            self.cube["R"][1],
-            self.cube["B"][0],
-            self.cube["B"][1],
-            self.cube["L"][0],
-            self.cube["L"][1],
-            self.cube["F"][0],
-            self.cube["F"][1],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][1],
+            self.cube[Side.Back][0],
+            self.cube[Side.Back][1],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][1],
+            self.cube[Side.Front][0],
+            self.cube[Side.Front][1],
         ) = (
-            self.cube["F"][0],
-            self.cube["F"][1],
-            self.cube["R"][0],
-            self.cube["R"][1],
-            self.cube["B"][0],
-            self.cube["B"][1],
-            self.cube["L"][0],
-            self.cube["L"][1],
+            self.cube[Side.Front][0],
+            self.cube[Side.Front][1],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][1],
+            self.cube[Side.Back][0],
+            self.cube[Side.Back][1],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][1],
         )
 
     def rotate_U(self):
-        self.rotate_face("U")
+        self._rotate_face(Side.Up)
         (
-            self.cube["L"][0],
-            self.cube["L"][1],
-            self.cube["F"][0],
-            self.cube["F"][1],
-            self.cube["R"][0],
-            self.cube["R"][1],
-            self.cube["B"][0],
-            self.cube["B"][1],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][1],
+            self.cube[Side.Front][0],
+            self.cube[Side.Front][1],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][1],
+            self.cube[Side.Back][0],
+            self.cube[Side.Back][1],
         ) = (
-            self.cube["F"][0],
-            self.cube["F"][1],
-            self.cube["R"][0],
-            self.cube["R"][1],
-            self.cube["B"][0],
-            self.cube["B"][1],
-            self.cube["L"][0],
-            self.cube["L"][1],
+            self.cube[Side.Front][0],
+            self.cube[Side.Front][1],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][1],
+            self.cube[Side.Back][0],
+            self.cube[Side.Back][1],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][1],
         )
 
     def rotate_D_prime(self):
         """Поворот нижней грани против часовой стрелки"""
-        self.rotate_face_prime("D")
-        (
-            self.cube["L"][2],
-            self.cube["L"][3],
-            self.cube["F"][2],
-            self.cube["F"][3],
-            self.cube["R"][2],
-            self.cube["R"][3],
-            self.cube["B"][2],
-            self.cube["B"][3],
-        ) = (
-            self.cube["F"][2],
-            self.cube["F"][3],
-            self.cube["R"][2],
-            self.cube["R"][3],
-            self.cube["B"][2],
-            self.cube["B"][3],
-            self.cube["L"][2],
-            self.cube["L"][3],
+        self._rotate_face(Side.Down, clockwise=False)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Left, (2, 3), Side.Front, (2, 3)),
+                SwapHelper(Side.Front, (2, 3), Side.Right, (2, 3)),
+                SwapHelper(Side.Right, (2, 3), Side.Back, (2, 3)),
+                SwapHelper(Side.Back, (2, 3), Side.Left, (2, 3)),
+            )
         )
 
     def rotate_D(self):
-        self.rotate_face("D")
-        (
-            self.cube["F"][2],
-            self.cube["F"][3],
-            self.cube["R"][2],
-            self.cube["R"][3],
-            self.cube["B"][2],
-            self.cube["B"][3],
-            self.cube["L"][2],
-            self.cube["L"][3],
-        ) = (
-            self.cube["L"][2],
-            self.cube["L"][3],
-            self.cube["F"][2],
-            self.cube["F"][3],
-            self.cube["R"][2],
-            self.cube["R"][3],
-            self.cube["B"][2],
-            self.cube["B"][3],
+        self._rotate_face(Side.Down)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Front, (2, 3), Side.Left, (2, 3)),
+                SwapHelper(Side.Right, (2, 3), Side.Front, (2, 3)),
+                SwapHelper(Side.Back, (2, 3), Side.Right, (2, 3)),
+                SwapHelper(Side.Left, (2, 3), Side.Back, (2, 3)),
+            )
         )
 
     def rotate_F_prime(self):
         """Поворот передней грани против часовой стрелки"""
-        self.rotate_face_prime("F")
-        (
-            self.cube["L"][3],
-            self.cube["L"][1],
-            self.cube["U"][2],
-            self.cube["U"][3],
-            self.cube["R"][0],
-            self.cube["R"][2],
-            self.cube["D"][0],
-            self.cube["D"][1],
-        ) = (
-            self.cube["U"][2],
-            self.cube["U"][3],
-            self.cube["R"][0],
-            self.cube["R"][2],
-            self.cube["D"][1],
-            self.cube["D"][0],
-            self.cube["L"][1],
-            self.cube["L"][3],
+        self._rotate_face(Side.Front, clockwise=False)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Left, (3, 1), Side.Up, (2, 3)),
+                SwapHelper(Side.Up, (2, 3), Side.Right, (0, 2)),
+                SwapHelper(Side.Right, (0, 2), Side.Down, (1, 0)),
+                SwapHelper(Side.Down, (0, 1), Side.Left, (1, 3)),
+            )
         )
 
     def rotate_F(self):
-        self.rotate_face("F")
-        (
-            self.cube["R"][0],
-            self.cube["R"][2],
-            self.cube["D"][0],
-            self.cube["D"][1],
-            self.cube["L"][1],
-            self.cube["L"][3],
-            self.cube["U"][2],
-            self.cube["U"][3],
-        ) = (
-            self.cube["U"][2],
-            self.cube["U"][3],
-            self.cube["R"][2],
-            self.cube["R"][0],
-            self.cube["D"][0],
-            self.cube["D"][1],
-            self.cube["L"][3],
-            self.cube["L"][1],
+        self._rotate_face("F")
+        self._swap_elements(
+            (
+                SwapHelper(Side.Right, (0, 2), Side.Up, (2, 3)),
+                SwapHelper(Side.Down, (0, 1), Side.Right, (2, 0)),
+                SwapHelper(Side.Left, (1, 3), Side.Down, (0, 1)),
+                SwapHelper(Side.Up, (2, 3), Side.Left, (3, 1)),
+            )
         )
 
     def rotate_B_prime(self):
         """Поворот задней грани против часовой стрелки"""
-        self.rotate_face_prime("B")
-        (
-            self.cube["U"][0],
-            self.cube["U"][1],
-            self.cube["R"][1],
-            self.cube["R"][3],
-            self.cube["D"][2],
-            self.cube["D"][3],
-            self.cube["L"][0],
-            self.cube["L"][2],
-        ) = (
-            self.cube["L"][2],
-            self.cube["L"][0],
-            self.cube["U"][0],
-            self.cube["U"][1],
-            self.cube["R"][3],
-            self.cube["R"][1],
-            self.cube["D"][2],
-            self.cube["D"][3],
+        self._rotate_face(Side.Back, clockwise=False)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Up, (0, 1), Side.Left, (2, 0)),
+                SwapHelper(Side.Right, (1, 3), Side.Up, (0, 1)),
+                SwapHelper(Side.Down, (2, 3), Side.Right, (3, 1)),
+                SwapHelper(Side.Left, (0, 2), Side.Down, (2, 3)),
+            )
         )
 
     def rotate_B(self):
-        self.rotate_face("B")
-        (
-            self.cube["U"][0],
-            self.cube["U"][1],
-            self.cube["R"][1],
-            self.cube["R"][3],
-            self.cube["D"][2],
-            self.cube["D"][3],
-            self.cube["L"][0],
-            self.cube["L"][2],
-        ) = (
-            self.cube["R"][1],
-            self.cube["R"][3],
-            self.cube["D"][3],
-            self.cube["D"][2],
-            self.cube["L"][0],
-            self.cube["L"][2],
-            self.cube["U"][1],
-            self.cube["U"][0],
+        self._rotate_face(Side.Back)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Up, (0, 1), Side.Right, (1, 3)),
+                SwapHelper(Side.Right, (1, 3), Side.Down, (3, 2)),
+                SwapHelper(Side.Down, (2, 3), Side.Left, (0, 2)),
+                SwapHelper(Side.Left, (0, 2), Side.Up, (1, 0)),
+            )
         )
 
     def rotate_R(self):
-        self.rotate_face("R")
-        (
-            self.cube["F"][1],
-            self.cube["F"][3],
-            self.cube["U"][1],
-            self.cube["U"][3],
-            self.cube["B"][0],
-            self.cube["B"][2],
-            self.cube["D"][1],
-            self.cube["D"][3],
-        ) = (
-            self.cube["D"][1],
-            self.cube["D"][3],
-            self.cube["F"][1],
-            self.cube["F"][3],
-            self.cube["U"][3],
-            self.cube["U"][1],
-            self.cube["B"][2],
-            self.cube["B"][0],
+        self._rotate_face(Side.Right)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Front, (1, 3), Side.Down, (1, 3)),
+                SwapHelper(Side.Up, (1, 3), Side.Front, (1, 3)),
+                SwapHelper(Side.Back, (0, 2), Side.Up, (3, 1)),
+                SwapHelper(Side.Down, (1, 3), Side.Back, (2, 0)),
+            )
         )
 
     def rotate_R_prime(self):
         """Поворот правой грани против часовой стрелки"""
-        self.rotate_face_prime("R")
-        (
-            self.cube["F"][1],
-            self.cube["F"][3],
-            self.cube["U"][1],
-            self.cube["U"][3],
-            self.cube["B"][0],
-            self.cube["B"][2],
-            self.cube["D"][1],
-            self.cube["D"][3],
-        ) = (
-            self.cube["U"][1],
-            self.cube["U"][3],
-            self.cube["B"][2],
-            self.cube["B"][0],
-            self.cube["D"][3],
-            self.cube["D"][1],
-            self.cube["F"][1],
-            self.cube["F"][3],
+        self._rotate_face(Side.Right, clockwise=False)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Front, (1, 3), Side.Up, (1, 3)),
+                SwapHelper(Side.Up, (1, 3), Side.Back, (2, 0)),
+                SwapHelper(Side.Back, (0, 2), Side.Down, (3, 1)),
+                SwapHelper(Side.Down, (1, 3), Side.Front, (1, 3)),
+            )
         )
 
     def rotate_L_prime(self):
         """Поворот левой грани против часовой стрелки"""
-        self.rotate_face_prime("L")
-        (
-            self.cube["F"][0],
-            self.cube["F"][2],
-            self.cube["U"][0],
-            self.cube["U"][2],
-            self.cube["B"][1],
-            self.cube["B"][3],
-            self.cube["D"][0],
-            self.cube["D"][2],
-        ) = (
-            self.cube["D"][0],
-            self.cube["D"][2],
-            self.cube["F"][0],
-            self.cube["F"][2],
-            self.cube["U"][2],
-            self.cube["U"][0],
-            self.cube["B"][3],
-            self.cube["B"][1],
+        self._rotate_face(Side.Left, clockwise=False)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Front, (0, 2), Side.Down, (0, 2)),
+                SwapHelper(Side.Up, (0, 2), Side.Front, (0, 2)),
+                SwapHelper(Side.Back, (1, 3), Side.Up, (2, 0)),
+                SwapHelper(Side.Down, (0, 2), Side.Back, (3, 1)),
+            )
         )
 
     def rotate_L(self):
-        self.rotate_face("L")
-        (
-            self.cube["F"][0],
-            self.cube["F"][2],
-            self.cube["U"][0],
-            self.cube["U"][2],
-            self.cube["B"][1],
-            self.cube["B"][3],
-            self.cube["D"][0],
-            self.cube["D"][2],
-        ) = (
-            self.cube["U"][0],
-            self.cube["U"][2],
-            self.cube["B"][3],
-            self.cube["B"][1],
-            self.cube["D"][2],
-            self.cube["D"][0],
-            self.cube["F"][0],
-            self.cube["F"][2],
+        self._rotate_face(Side.Left)
+        self._swap_elements(
+            (
+                SwapHelper(Side.Front, (0, 2), Side.Up, (0, 2)),
+                SwapHelper(Side.Up, (0, 2), Side.Back, (3, 1)),
+                SwapHelper(Side.Back, (1, 3), Side.Down, (2, 0)),
+                SwapHelper(Side.Down, (0, 2), Side.Front, (0, 2)),
+            )
         )
 
     def rotate_X(self):
         """Поворот кубика вокруг оси X по часовой стрелке"""
-        self.rotate_face("R")
-        self.rotate_face_prime("L")
+        self._rotate_face(Side.Right)
+        self._rotate_face(Side.Left, clockwise=False)
         # Поворот смежных граней
         (
-            self.cube["U"],
-            self.cube["D"],
-            self.cube["B"],
-            self.cube["F"],
+            self.cube[Side.Up],
+            self.cube[Side.Down],
+            self.cube[Side.Back],
+            self.cube[Side.Front],
         ) = (
-            self.cube["F"],
-            self.cube["B"][::-1],
-            self.cube["U"][::-1],
-            self.cube["D"],
-    )
+            self.cube[Side.Front],
+            self.cube[Side.Back][::-1],
+            self.cube[Side.Up][::-1],
+            self.cube[Side.Down],
+        )
 
     def rotate_X_prime(self):
         """Поворот кубика вокруг оси X против часовой стрелке"""
-        self.rotate_face("L")
-        self.rotate_face_prime("R")
+        self._rotate_face(Side.Left)
+        self._rotate_face(Side.Right, clockwise=False)
         # Поворот смежных граней
         (
-            self.cube["U"],
-            self.cube["D"],
-            self.cube["B"],
-            self.cube["F"],
+            self.cube[Side.Up],
+            self.cube[Side.Down],
+            self.cube[Side.Back],
+            self.cube[Side.Front],
         ) = (
-            self.cube["B"][::-1],
-            self.cube["F"],
-            self.cube["D"][::-1],
-            self.cube["U"],
-    )
+            self.cube[Side.Back][::-1],
+            self.cube[Side.Front],
+            self.cube[Side.Down][::-1],
+            self.cube[Side.Up],
+        )
 
     def rotate_Y(self):
         """Поворот кубика вокруг оси Y по часовой стрелке"""
-        self.rotate_face("U")
-        self.rotate_face_prime("D")
+        self._rotate_face(Side.Up)
+        self._rotate_face(Side.Down, clockwise=False)
         # Поворот смежных граней
         (
-            self.cube["F"],
-            self.cube["R"],
-            self.cube["B"],
-            self.cube["L"],
+            self.cube[Side.Front],
+            self.cube[Side.Right],
+            self.cube[Side.Back],
+            self.cube[Side.Left],
         ) = (
-            self.cube["R"],
-            self.cube["B"],
-            self.cube["L"],
-            self.cube["F"],
-    )
-        
+            self.cube[Side.Right],
+            self.cube[Side.Back],
+            self.cube[Side.Left],
+            self.cube[Side.Front],
+        )
+
     def rotate_Y_prime(self):
         """Поворот кубика вокруг оси Y против часовой стрелке"""
-        self.rotate_face("D")
-        self.rotate_face_prime("U")
+        self._rotate_face(Side.Down)
+        self._rotate_face(Side.Up, clockwise=False)
         # Поворот смежных граней
         (
-            self.cube["F"],
-            self.cube["R"],
-            self.cube["B"],
-            self.cube["L"],
+            self.cube[Side.Front],
+            self.cube[Side.Right],
+            self.cube[Side.Back],
+            self.cube[Side.Left],
         ) = (
-            self.cube["L"],
-            self.cube["F"],
-            self.cube["R"],
-            self.cube["B"],
-    )
+            self.cube[Side.Left],
+            self.cube[Side.Front],
+            self.cube[Side.Right],
+            self.cube[Side.Back],
+        )
 
     def rotate_Z(self):
         """Поворот кубика вокруг оси Z по часовой стрелке"""
-        self.rotate_face("F")
-        self.rotate_face_prime("B")
+        self._rotate_face(Side.Front)
+        self._rotate_face(Side.Back, clockwise=False)
         # Поворот смежных граней
         (
             self.cube["U"],
@@ -396,33 +318,32 @@ class RubiksCube2x2:
             self.cube["U"],
             self.cube["R"],
             self.cube["D"],
-    )
+        )
 
     def rotate_Z_prime(self):
         """Поворот кубика вокруг оси Z против часовой стрелке"""
-        self.rotate_face("B")
-        self.rotate_face_prime("F")
+        self._rotate_face(Side.Back)
+        self._rotate_face(Side.Front, clockwise=False)
         # Поворот смежных граней
         (
-            self.cube["U"],
-            self.cube["R"],
-            self.cube["D"],
-            self.cube["L"],
+            self.cube[Side.Up],
+            self.cube[Side.Right],
+            self.cube[Side.Down],
+            self.cube[Side.Left],
         ) = (
-            self.cube["R"],
-            self.cube["D"],
-            self.cube["L"],
-            self.cube["U"],
-    )
+            self.cube[Side.Right],
+            self.cube[Side.Down],
+            self.cube[Side.Left],
+            self.cube[Side.Up],
+        )
 
     def display_cube(self):
-        for face in ["U", "F", "R", "D", "L", "B"]:
-            print(f"{face}: {self.cube[face]}")
+        for side in (Side.Up, Side.Front, Side.Right, Side.Down, Side.Left, Side.Back):
+            print(f"{side}: {self.cube[side]}")
 
-    def scramble(self, moves=20):
+    def scramble(self, moves: int = 20):
         """Функция для случайного запутывания кубика с исключением обратных ходов"""
-        faces = ["U", "D", "F", "B", "R", "L"]
-        directions = [
+        directions = (
             (self.rotate_U, "U", "U'"),
             (self.rotate_U_prime, "U'", "U"),
             (self.rotate_D, "D", "D'"),
@@ -433,7 +354,7 @@ class RubiksCube2x2:
             (self.rotate_R_prime, "R'", "R"),
             (self.rotate_L, "L", "L'"),
             (self.rotate_L_prime, "L'", "L"),
-        ]
+        )
 
         last_move = None  # Переменная для хранения последнего выполненного хода
         print("Запутывание кубика:")

@@ -381,51 +381,6 @@ def test_rotation_F_back_and_forth():
 
     assert cube.cube == original_cube
 
-def test_rotation_face():
-    c = {
-        "U": ["W", "O", "R", "W"], # UP
-        "D": ["Y", "B", "G", "R"], # DOWN
-        "F": ["Y", "G", "B", "O"], # FRONT
-        "B": ["W", "B", "B", "Y"], # BACK
-        "R": ["R", "G", "Y", "W"], # RIGHT
-        "L": ["O", "G", "O", "R"]  # LEFT
-    }
-    cube = RubiksCube2x2(c)
-    cube.rotate_face("F")
-
-    cube_result = {
-        "U": ["W", "O", "R", "W"], # UP
-        "D": ["Y", "B", "G", "R"], # DOWN
-        "F": ["B", "Y", "O", "G"], # FRONT
-        "B": ["W", "B", "B", "Y"], # BACK
-        "R": ["R", "G", "Y", "W"], # RIGHT
-        "L": ["O", "G", "O", "R"]  # LEFT
-    }
-    assert cube.cube == cube_result
-
-def test_rotation_face_prime():
-    c = {
-        "U": ["W", "O", "R", "W"], # UP
-        "D": ["Y", "B", "G", "R"], # DOWN
-        "F": ["Y", "G", "B", "O"], # FRONT
-        "B": ["W", "B", "B", "Y"], # BACK
-        "R": ["R", "G", "Y", "W"], # RIGHT
-        "L": ["O", "G", "O", "R"]  # LEFT
-    }
-    cube = RubiksCube2x2(c)
-    cube.rotate_face_prime("F")
-
-    cube_result = {
-        "U": ["W", "O", "R", "W"], # UP
-        "D": ["Y", "B", "G", "R"], # DOWN
-        "F": ["G", "O", "Y", "B"], # FRONT
-        "B": ["W", "B", "B", "Y"], # BACK
-        "R": ["R", "G", "Y", "W"], # RIGHT
-        "L": ["O", "G", "O", "R"]  # LEFT
-    }
-    assert cube.cube == cube_result
-
-
 def test_rotation_X():
     c = {
         "U": ["W", "R", "O", "O"], # UP
