@@ -471,44 +471,44 @@ def test_rotation_Y_prime():
 
 def test_rotation_Z():
     c = {
-        "U": ["W", "R", "O", "O"], # UP
-        "D": ["R", "W", "G", "O"], # DOWN
-        "F": ["G", "B", "Y", "R"], # FRONT
-        "B": ["W", "B", "G", "R"], # BACK
-        "R": ["Y", "B", "G", "W"], # RIGHT
-        "L": ["O", "Y", "Y", "B"]  # LEFT
+        "U": ['W', 'B', 'O', 'O'], # UP
+        "D": ['B', 'O', 'Y', 'O'], # DOWN
+        "F": ['G', 'G', 'R', 'B'], # FRONT
+        "B": ['R', 'G', 'B', 'G'], # BACK
+        "R": ['W', 'W', 'W', 'Y'], # RIGHT
+        "L": ['R', 'Y', 'R', 'Y']  # LEFT
     }
     cube = RubiksCube2x2(c)
     cube.rotate_Z()
 
     cube_result = {
-        "U": ["O", "Y", "Y", "B"], # UP
-        "D": ["Y", "B", "G", "W"], # DOWN
-        "F": ['Y', 'G', 'R', 'B'], # FRONT
-        "B": ['B', 'R', 'W', 'G'], # BACK
-        "R": ["W", "R", "O", "O"], # RIGHT
-        "L": ["R", "W", "G", "O"]  # LEFT
+        "U": ['R', 'R', 'Y', 'Y'], # UP
+        "D": ['W', 'W', 'Y', 'W'], # DOWN
+        "F": ['R', 'G', 'B', 'G'], # FRONT
+        "B": ['G', 'G', 'R', 'B'], # BACK
+        "R": ['O', 'W', 'O', 'B'], # RIGHT
+        "L": ['Y', 'B', 'O', 'O']  # LEFT
     }
     assert cube.cube == cube_result
 
 def test_rotation_Z_prime():
     c = {
-        "U": ["W", "R", "O", "O"], # UP
-        "D": ["R", "W", "G", "O"], # DOWN
-        "F": ["G", "B", "Y", "R"], # FRONT
-        "B": ["W", "B", "G", "R"], # BACK
-        "R": ["Y", "B", "G", "W"], # RIGHT
-        "L": ["O", "Y", "Y", "B"]  # LEFT
+        "U": ['W', 'B', 'O', 'O'], # UP
+        "D": ['B', 'O', 'Y', 'O'], # DOWN
+        "F": ['G', 'G', 'R', 'B'], # FRONT
+        "B": ['R', 'G', 'B', 'G'], # BACK
+        "R": ['W', 'W', 'W', 'Y'], # RIGHT
+        "L": ['R', 'Y', 'R', 'Y']  # LEFT
     }
     cube = RubiksCube2x2(c)
     cube.rotate_Z_prime()
 
     cube_result = {
-        "U": ["Y", "B", "G", "W"], # UP
-        "D": ["O", "Y", "Y", "B"], # DOWN
-        "F": ['B', 'R', 'G', 'Y'], # FRONT
-        "B": ['G', 'W', 'R', 'B'], # BACK
-        "R": ["R", "W", "G", "O"], # RIGHT
-        "L": ["W", "R", "O", "O"]  # LEFT
+        "U": ["W", "Y", "W", "W"], # UP
+        "D": ["Y", "Y", "R", "R"], # DOWN
+        "F": ['G', 'B', 'G', 'R'], # FRONT
+        "B": ['B', 'R', 'G', 'G'], # BACK
+        "R": ["O", "O", "B", "Y"], # RIGHT
+        "L": ["B", "O", "W", "O"]  # LEFT
     }
     assert cube.cube == cube_result
