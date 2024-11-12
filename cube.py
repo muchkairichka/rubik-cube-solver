@@ -304,6 +304,7 @@ class RubiksCube2x2:
         )
 
     def rotate_Z(self):
+        """Поворот кубика вокруг оси Z по часовой стрелке"""
         self._rotate_face(Side.Front)
         self._rotate_face(Side.Back, clockwise=False)
 
