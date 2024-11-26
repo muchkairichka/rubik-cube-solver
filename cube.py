@@ -307,17 +307,42 @@ class RubiksCube2x2:
         """Поворот кубика вокруг оси Z по часовой стрелке"""
         self._rotate_face(Side.Front)
         self._rotate_face(Side.Back, clockwise=False)
+
         # Поворот смежных граней
         (
-            self.cube["U"],
-            self.cube["R"],
-            self.cube["D"],
-            self.cube["L"],
+            self.cube[Side.Up][0],
+            self.cube[Side.Up][1],
+            self.cube[Side.Up][2],
+            self.cube[Side.Up][3],
+            self.cube[Side.Down][0],
+            self.cube[Side.Down][1],
+            self.cube[Side.Down][2],
+            self.cube[Side.Down][3],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][1],
+            self.cube[Side.Left][2],
+            self.cube[Side.Left][3],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][1],
+            self.cube[Side.Right][2],
+            self.cube[Side.Right][3],
         ) = (
-            self.cube["L"],
-            self.cube["U"],
-            self.cube["R"],
-            self.cube["D"],
+            self.cube[Side.Left][2],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][3],
+            self.cube[Side.Left][1],
+            self.cube[Side.Right][2],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][3],
+            self.cube[Side.Right][1],
+            self.cube[Side.Down][2],
+            self.cube[Side.Down][0],
+            self.cube[Side.Down][3],
+            self.cube[Side.Down][1],
+            self.cube[Side.Up][2],
+            self.cube[Side.Up][0],
+            self.cube[Side.Up][3],
+            self.cube[Side.Up][1],
         )
 
     def rotate_Z_prime(self):
@@ -326,15 +351,39 @@ class RubiksCube2x2:
         self._rotate_face(Side.Front, clockwise=False)
         # Поворот смежных граней
         (
-            self.cube[Side.Up],
-            self.cube[Side.Right],
-            self.cube[Side.Down],
-            self.cube[Side.Left],
+            self.cube[Side.Up][0],
+            self.cube[Side.Up][1],
+            self.cube[Side.Up][2],
+            self.cube[Side.Up][3],
+            self.cube[Side.Down][0],
+            self.cube[Side.Down][1],
+            self.cube[Side.Down][2],
+            self.cube[Side.Down][3],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][1],
+            self.cube[Side.Left][2],
+            self.cube[Side.Left][3],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][1],
+            self.cube[Side.Right][2],
+            self.cube[Side.Right][3],
         ) = (
-            self.cube[Side.Right],
-            self.cube[Side.Down],
-            self.cube[Side.Left],
-            self.cube[Side.Up],
+            self.cube[Side.Right][1],
+            self.cube[Side.Right][3],
+            self.cube[Side.Right][0],
+            self.cube[Side.Right][2],
+            self.cube[Side.Left][1],
+            self.cube[Side.Left][3],
+            self.cube[Side.Left][0],
+            self.cube[Side.Left][2],
+            self.cube[Side.Up][1],
+            self.cube[Side.Up][3],
+            self.cube[Side.Up][0],
+            self.cube[Side.Up][2],
+            self.cube[Side.Down][1],
+            self.cube[Side.Down][3],
+            self.cube[Side.Down][0],
+            self.cube[Side.Down][2],
         )
 
     def display_cube(self):
@@ -354,6 +403,13 @@ class RubiksCube2x2:
             (self.rotate_R_prime, "R'", "R"),
             (self.rotate_L, "L", "L'"),
             (self.rotate_L_prime, "L'", "L"),
+            (self.rotate_X, "X", "X'"),
+            (self.rotate_X_prime, "X'", "X"),
+            (self.rotate_Y, "Y", "Y'"),
+            (self.rotate_Y_prime, "Y'", "Y"),
+            (self.rotate_Z, "Z", "Z'"),
+            (self.rotate_Z_prime, "Z'", "Z"),
+            
         )
 
         last_move = None  # Переменная для хранения последнего выполненного хода
